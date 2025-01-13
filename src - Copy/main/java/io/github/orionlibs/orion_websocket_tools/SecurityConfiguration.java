@@ -3,23 +3,21 @@ package io.github.orionlibs.orion_websocket_tools;
 import java.util.Arrays;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
-import org.springframework.messaging.Message;
-import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer;
+import org.springframework.security.config.annotation.web.socket.EnableWebSocketSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.messaging.access.intercept.MessageMatcherDelegatingAuthorizationManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
 
 @Configuration
+@EnableWebSocketSecurity
 public class SecurityConfiguration
 {
     @Bean
@@ -60,7 +58,6 @@ public class SecurityConfiguration
 
 
     @Bean
-    @Primary
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception
     {
         http.cors(corsCustomizer())
@@ -76,9 +73,4 @@ public class SecurityConfiguration
                         .simpSubscribeDestMatchers("/topic/**", "/queue/**").authenticated()
                         .anyMessage().authenticated();
     }*/
-    @Bean
-    public AuthorizationManager<Message<?>> messageAuthorizationManager(MessageMatcherDelegatingAuthorizationManager.Builder messages) {
-        return messages.anyMessage().permitAll()
-                        .build();
-    }
 }
