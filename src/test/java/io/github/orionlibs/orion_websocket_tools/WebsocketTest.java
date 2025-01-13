@@ -13,19 +13,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandler;
-import org.springframework.security.config.annotation.web.socket.EnableWebSocketSecurity;
-import org.springframework.security.messaging.access.intercept.MessageMatcherDelegatingAuthorizationManager;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.web.socket.client.WebSocketClient;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
@@ -36,7 +30,6 @@ import org.springframework.web.socket.messaging.WebSocketStompClient;
 @SpringBootTest(classes = {WebsocketApplication.class}, properties = {
                 "spring.main.allow-bean-definition-overriding=true"
 }, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(properties = {
                 "spring.security.enabled=false",
                 "spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration,org.springframework.boot.autoconfigure.security.reactive.ReactiveSecurityAutoConfiguration"
@@ -84,7 +77,7 @@ public class WebsocketTest extends ATest
             public void afterConnected(StompSession session, StompHeaders connectedHeaders)
             {
                 logger.info("Connected to the WebSocket ...");
-                session.subscribe("/topic/ticks", new StompFrameHandler()
+                session.subscribe("/topic/chatmessages", new StompFrameHandler()
                 {
                     @Override
                     public Type getPayloadType(StompHeaders headers)
@@ -130,8 +123,8 @@ public class WebsocketTest extends ATest
             {
             }
         };
-        stompClient.connectAsync("ws://localhost:{port}/stock-ticks/websocket", sessionHandler, this.port);
-        if(latch.await(5, TimeUnit.SECONDS))
+        stompClient.connectAsync("ws://localhost:" + this.port + "/topic/chatmessages", sessionHandler);
+        if(latch.await(10, TimeUnit.SECONDS))
         {
             if(failure.get() != null)
             {
@@ -146,15 +139,7 @@ public class WebsocketTest extends ATest
 
 
     @Configuration
-    @EnableWebSocketSecurity
-    @Order(Ordered.HIGHEST_PRECEDENCE)
     static class WebsocketSpringContext
     {
-        @Bean
-        @Primary
-        public MessageMatcherDelegatingAuthorizationManager.Builder messageAuthorizationManager()
-        {
-            return new MessageMatcherDelegatingAuthorizationManager.Builder();
-        }
     }
 }
