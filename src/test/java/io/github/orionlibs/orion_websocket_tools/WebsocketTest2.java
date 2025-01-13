@@ -38,8 +38,7 @@ public class WebsocketTest2 extends ATest
     public void setup()
     {
         blockingQueue = new LinkedBlockingDeque<>();
-        stompClient = new WebSocketStompClient(new SockJsClient(
-                        Arrays.asList(new WebSocketTransport(new StandardWebSocketClient()))));
+        stompClient = new WebSocketStompClient(new SockJsClient(Arrays.asList(new WebSocketTransport(new StandardWebSocketClient()))));
     }
 
 
@@ -47,14 +46,14 @@ public class WebsocketTest2 extends ATest
     public void shouldReceiveAMessageFromTheServer() throws Exception
     {
         StompSession session = stompClient
-                        .connectAsync("ws://localhost:" + this.port + "/topic/chatmessages", new StompSessionHandlerAdapter()
+                        .connectAsync("ws://0.0.0.0:" + this.port + "/topic", new StompSessionHandlerAdapter()
                         {
                         })
-                        .get(1, TimeUnit.SECONDS);
-        session.subscribe("/topic/chatmessages", new DefaultStompFrameHandler());
+                        .get(5, TimeUnit.SECONDS);
+        session.subscribe("/topic/info", new DefaultStompFrameHandler());
         String message = "MESSAGE TEST";
-        session.send("/topic/chatmessages", message.getBytes());
-        assertEquals(message, blockingQueue.poll(1, TimeUnit.SECONDS));
+        session.send("/topic/info", message.getBytes());
+        assertEquals(message, blockingQueue.poll(5, TimeUnit.SECONDS));
     }
 
 

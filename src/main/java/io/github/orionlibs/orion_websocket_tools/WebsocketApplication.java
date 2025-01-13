@@ -2,17 +2,13 @@ package io.github.orionlibs.orion_websocket_tools;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.security.config.ObjectPostProcessor;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 @Configuration
 @SpringBootApplication
 @EnableScheduling
-@EnableWebSecurity
+//@EnableWebSecurity
 public class WebsocketApplication
 {
     public static void main(String[] args)
@@ -21,7 +17,7 @@ public class WebsocketApplication
     }
 
 
-    @Bean
+    /*@Bean
     @Primary
     public ObjectPostProcessor<Object> objectPostProcessor()
     {
@@ -34,5 +30,5 @@ public class WebsocketApplication
                 return object;
             }
         };
-    }
+    }*/
 }
