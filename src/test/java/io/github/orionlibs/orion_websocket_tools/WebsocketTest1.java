@@ -16,7 +16,9 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.AbstractSubscribableChannel;
 import org.springframework.messaging.support.MessageBuilder;
 
-@SpringBootTest(classes = {WebsocketApplication.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = {WebsocketApplication.class}, properties = {
+                "spring.main.allow-bean-definition-overriding=true"
+}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class WebsocketTest1
 {
     @LocalServerPort
@@ -46,53 +48,20 @@ public class WebsocketTest1
     {
         StompHeaderAccessor headers = StompHeaderAccessor.create(StompCommand.SUBSCRIBE);
         headers.setSubscriptionId("0");
-        headers.setDestination("/app/users");
+        headers.setDestination("/users");
         headers.setSessionId("0");
-        headers.setUser(new TestPrincipal("fabrice"));
+        //headers.setUser(new TestPrincipal("fabrice"));
         headers.setSessionAttributes(new HashMap<>());
         Message<byte[]> message = MessageBuilder.createMessage(new byte[0], headers.getMessageHeaders());
-        this.clientOutboundChannelInterceptor.setIncludedDestinations("/app/users");
+        this.clientOutboundChannelInterceptor.setIncludedDestinations("/users");
         this.clientInboundChannel.send(message);
         Message<?> reply = this.clientOutboundChannelInterceptor.awaitMessage(5);
         assertNotNull(reply);
         StompHeaderAccessor replyHeaders = StompHeaderAccessor.wrap(reply);
         assertEquals("0", replyHeaders.getSessionId());
         assertEquals("0", replyHeaders.getSubscriptionId());
-        assertEquals("/app/users", replyHeaders.getDestination());
+        assertEquals("/users", replyHeaders.getDestination());
         String json = new String((byte[])reply.getPayload(), Charset.forName("UTF-8"));
         assertEquals(json, "Citrix Systems, Inc.");
     }
-    /**
-     * Configuration class that un-registers MessageHandler's it finds in the
-     * ApplicationContext from the message channels they are subscribed to...
-     * except the message handler used to invoke annotated message handling methods.
-     * The intent is to reduce additional processing and additional messages not
-     * related to the test.
-     */
-    /*@Configuration
-    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
-    static class TestConfig implements ApplicationListener<ContextRefreshedEvent>
-    {
-        @Autowired
-        private List<SubscribableChannel> channels;
-        @Autowired
-        private List<MessageHandler> handlers;
-
-
-        @Override
-        public void onApplicationEvent(ContextRefreshedEvent event)
-        {
-            for(MessageHandler handler : handlers)
-            {
-                if(handler instanceof SimpAnnotationMethodMessageHandler)
-                {
-                    continue;
-                }
-                for(SubscribableChannel channel : channels)
-                {
-                    channel.unsubscribe(handler);
-                }
-            }
-        }
-    }*/
 }

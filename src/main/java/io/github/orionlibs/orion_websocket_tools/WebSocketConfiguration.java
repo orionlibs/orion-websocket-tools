@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.scheduling.TaskScheduler;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
@@ -18,6 +19,7 @@ import org.springframework.web.socket.server.standard.ServletServerContainerFact
 import org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor;
 
 @Configuration
+@EnableScheduling
 @EnableWebSocket
 @EnableWebSocketMessageBroker
 public class WebSocketConfiguration implements WebSocketConfigurer, WebSocketMessageBrokerConfigurer
@@ -39,6 +41,7 @@ public class WebSocketConfiguration implements WebSocketConfigurer, WebSocketMes
                         .withSockJS()
                         .setClientLibraryUrl("http://localhost:8080/myapp/js/sockjsclient.js");*/
         registry.addEndpoint("/users")
+                        .setAllowedOrigins("*")
                         .withSockJS()
                         .setStreamBytesLimit(512 * 1024)
                         .setHttpMessageCacheSize(1000)
@@ -50,6 +53,7 @@ public class WebSocketConfiguration implements WebSocketConfigurer, WebSocketMes
     public void configureMessageBroker(MessageBrokerRegistry registry)
     {
         registry.setApplicationDestinationPrefixes("/app");
+        registry.setUserDestinationPrefix("/app");
         //registry.setPreservePublishOrder(true);
         registry.enableSimpleBroker("/topic", "/queue")
                         .setHeartbeatValue(new long[] {10000, 20000})
@@ -91,20 +95,4 @@ public class WebSocketConfiguration implements WebSocketConfigurer, WebSocketMes
     {
         return new WebsocketHandler();
     }
-    /*@Override
-    public void registerStompEndpoints(StompEndpointRegistry registry)
-    {
-        //registry.addEndpoint("/chat").setAllowedOrigins("*");
-        registry.addEndpoint("/chat").setAllowedOrigins("*").withSockJS();
-    }
-
-
-    @Override
-    public void configureMessageBroker(MessageBrokerRegistry registry)
-    {
-        registry.enableSimpleBroker("/topic");
-        registry.setCacheLimit(0);
-        registry.setPreservePublishOrder(true);
-        registry.setApplicationDestinationPrefixes("/app");
-    }*/
 }
