@@ -81,4 +81,16 @@ public class SecurityConfiguration
         return messages.anyMessage().permitAll()
                         .build();
     }
+    
+    
+    @Bean
+    public ObjectPostProcessor<Object> objectPostProcessor() {
+        return new ObjectPostProcessor<Object>() {
+            @Override
+            public <T> T postProcess(T object) {
+                // Custom processing of objects, if required
+                return object;
+            }
+        };
+    }
 }

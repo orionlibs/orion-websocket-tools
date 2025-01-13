@@ -3,7 +3,6 @@ package io.github.orionlibs.orion_websocket_tools;
 import java.util.Arrays;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.messaging.Message;
 import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.config.Customizer;
@@ -20,7 +19,7 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
 
 @Configuration
-public class SecurityConfiguration
+public class WebSecurityConfiguration
 {
     @Bean
     public PasswordEncoder passwordEncoder()
@@ -60,7 +59,6 @@ public class SecurityConfiguration
 
 
     @Bean
-    @Primary
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception
     {
         http.cors(corsCustomizer())
@@ -77,7 +75,8 @@ public class SecurityConfiguration
                         .anyMessage().authenticated();
     }*/
     @Bean
-    public AuthorizationManager<Message<?>> messageAuthorizationManager(MessageMatcherDelegatingAuthorizationManager.Builder messages) {
+    public AuthorizationManager<Message<?>> messageAuthorizationManager(MessageMatcherDelegatingAuthorizationManager.Builder messages)
+    {
         return messages.anyMessage().permitAll()
                         .build();
     }

@@ -131,7 +131,7 @@ public class WebsocketTest extends ATest
             }
         };
         stompClient.connectAsync("ws://localhost:{port}/stock-ticks/websocket", sessionHandler, this.port);
-        if(latch.await(20, TimeUnit.SECONDS))
+        if(latch.await(5, TimeUnit.SECONDS))
         {
             if(failure.get() != null)
             {
