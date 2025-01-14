@@ -37,10 +37,10 @@ public class WebSocketConfiguration implements WebSocketConfigurer, WebSocketMes
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry)
     {
-        /*registry.addEndpoint("/websocket")
+        /*registry.addEndpoint("/users")
                         .withSockJS()
                         .setClientLibraryUrl("http://localhost:8080/myapp/js/sockjsclient.js");*/
-        registry.addEndpoint("/websocket")
+        registry.addEndpoint("/users")
                         .setAllowedOrigins("*")
                         .withSockJS()
                         .setStreamBytesLimit(512 * 1024)
