@@ -56,11 +56,11 @@ public class WebsocketTopicSubscribeTest
                 });
             }
         }).get(2, TimeUnit.SECONDS);
-        Utils.applyDelayInSeconds(2);
+        Utils.nonblockingDelay(2);
         String message = "MESSAGE TEST";
         session.send("/app/testtopic", message);
         assertTrue(session.isConnected());
-        Utils.applyDelayInSeconds(2);
+        Utils.nonblockingDelay(2);
         session.disconnect();
         assertTrue(messageReceived);
     }

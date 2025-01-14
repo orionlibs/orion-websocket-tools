@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Utils
 {
-    public static void applyDelayInSeconds(int numberOfSeconds)
+    public static void nonblockingDelay(int numberOfSeconds)
     {
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
         CompletableFuture<Void> delayedTask = CompletableFuture.runAsync(() -> {
