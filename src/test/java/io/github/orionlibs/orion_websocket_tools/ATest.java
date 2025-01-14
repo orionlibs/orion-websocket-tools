@@ -10,7 +10,6 @@ public class ATest
     static
     {
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
-        System.setProperty("active.execution.profile", OrionDomain.testing);
     }
 
     protected String loadResourceAsString(String fileLocation)
