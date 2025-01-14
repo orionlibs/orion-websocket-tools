@@ -11,9 +11,7 @@ public class Utils
     {
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
         CompletableFuture<Void> delayedTask = CompletableFuture.runAsync(() -> {
-                            System.out.println("Starting task...");
-                        }).thenCompose(ignored -> delay(numberOfSeconds, TimeUnit.SECONDS, scheduler))
-                        .thenRun(() -> System.out.println("Task completed after delay!"));
+        }).thenCompose(ignored -> delay(numberOfSeconds, TimeUnit.SECONDS, scheduler));
         delayedTask.join(); // Wait for the task to complete
         scheduler.shutdown();
     }
