@@ -27,7 +27,7 @@ public class WebsocketTopicSubscribeTest
 
 
     @Test
-    void testWebSocketConnectionWithSockJS() throws Exception
+    void testMessageSubscriptionAndPublicationToWebSocket() throws Exception
     {
         WebSocketStompClient stompClient = new WebSocketStompClient(new SockJsClient(List.of(new WebSocketTransport(new StandardWebSocketClient()))));
         stompClient.setMessageConverter(new StringMessageConverter());

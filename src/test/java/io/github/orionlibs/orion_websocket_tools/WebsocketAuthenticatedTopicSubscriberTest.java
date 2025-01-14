@@ -29,7 +29,7 @@ public class WebsocketAuthenticatedTopicSubscriberTest
 
 
     @Test
-    void testWebSocketConnectionWithSockJS() throws Exception
+    void testAuthenticatedWebSocketConnection() throws Exception
     {
         WebSocketHttpHeaders handshakeHeaders = new WebSocketHttpHeaders();
         StompHeaders connectHeaders = new StompHeaders();
