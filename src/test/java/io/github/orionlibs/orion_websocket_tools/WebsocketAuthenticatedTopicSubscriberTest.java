@@ -61,8 +61,8 @@ public class WebsocketAuthenticatedTopicSubscriberTest
                     }
                 });
             }
-        }).get(3, TimeUnit.SECONDS);
-        Utils.nonblockingDelay(3);
+        }).get(2, TimeUnit.SECONDS);
+        Utils.nonblockingDelay(2);
         String message = "MESSAGE TEST";
         session.send("/app/testtopic", message);
         assertTrue(session.isConnected());
